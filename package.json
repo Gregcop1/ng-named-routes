@@ -1,5 +1,5 @@
 {
-  "name": "angular-named-routes",
+  "name": "ng-named-routes",
   "version": "0.1.0",
   "description": "Service to set and get named routes for angular 4+ router",
   "main": "dist/index.js",

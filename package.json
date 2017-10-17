@@ -15,21 +15,28 @@
     "named route"
   ],
   "scripts": {
-    "build": "rm -Rf dist && tsc"
+    "build": "rm -Rf dist && tsc",
+    "lint": "tslint -c tslint.json 'src/*.ts'",
+    "pretest": "yarn lint",
+    "test": "$(npm bin)/jest"
   },
   "devDependencies": {
+    "@types/jest": "^21.1.3",
     "@types/node": "^8.0.34",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.1.2",
+    "tslint": "^5.7.0",
     "typescript": "^2.5.3",
     "uglify-js": "^3.1.3"
   },
-  "dependencies": {
-    "tslint": "^5.7.0"
-  },
-  "peerDependencies": {
-    "@angular/common": "^4.4.5",
-    "@angular/core": "^4.4.5",
-    "@angular/platform-browser": "^4.4.5",
-    "@angular/router": "^4.4.5",
-    "rxjs": "^5.4.3"
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/src/.*\\.spec\\.ts$"
   }
 }

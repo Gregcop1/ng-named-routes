@@ -1,87 +1,91 @@
-import {Router} from '@angular/router';
-
-interface INamedRoute {
-    name: string;
-    path: string;
+export interface INamedRoute {
+  name: string;
+  path: string;
 }
 
 export interface IRouter {
-    config: Array<object>;
-    [key: string]: any;
+  config: object[];
+  [key: string]: any;
 }
 
 export class NamedRoutesService {
-    private routes: Array<INamedRoute> = [];
-    private source: Array<any>;
+  private _routes: INamedRoute[] = [];
+  private source: any[];
 
-    /**
-     * @param {Array<any>} routes
-     */
-    public setRoutes(routes: Array<any>): void {
-        this.source = [...routes];
-        this.buildRoutes(routes);
+  public get routes(): INamedRoute[] {
+    return this._routes;
+  }
+
+  /**
+   * @param {Array<any>} routes
+   */
+  public setRoutes(routes: any[]): void {
+    this.source = [...routes];
+    this.buildRoutes(routes);
+  }
+
+  /**
+   * @param {string} name
+   * @returns {string}
+   */
+  public getRoute(name: string): string {
+    const route = this._routes.find((item) => name === item.name);
+
+    if (!route) {
+      throw new Error(`Can't find route with name: "${name}"`);
     }
 
-    /**
-     * Converts named routes to simple routes
-     *
-     * @param {Array<any>} routes
-     * @returns {Array<any>}
-     */
-    private buildRoutes(routes: Array<any>): void {
-        routes.map((route) => {
-            const {name, ...props} = route;
+    return route.path;
+  }
 
-            // stores a combination of name and route's full path
-            if (name) {
-                this.routes.push({ name, path: this.getFulltPath(name, this.source) });
-            }
+  /**
+   * Converts named routes to simple routes
+   *
+   * @param {Array<any>} routes
+   * @returns {Array<any>}
+   */
+  private buildRoutes(routes: any[]): void {
+    routes.map((route) => {
+      const {name, ...props} = route;
 
-            return {
-                ...props,
-                children: route.children ? this.buildRoutes(route.children) : null,
-            };
-        });
-    }
-
-    /**
-     * Recursively get the full path for a specific route
-     *
-     * @param {string} target
-     * @param {Array<any>} routes
-     * @returns {string}
-     */
-    private getFulltPath(target: string, routes: Array<any>): string {
-        for (let i = 0; i < routes.length; i++) {
-            const route = routes[i];
-
-            if (target === route.name) {
-                return route.path;
-            } else {
-                if (route.children) {
-                    const subPath = this.getFulltPath(target, route.children);
-
-                    if (undefined !== subPath) {
-                        return `${route.path}/${subPath}`;
-                    }
-                }
-            }
+      // stores a combination of name and route's full path
+      if (name) {
+        if (undefined === props.path || '' === props.path.trim()) {
+          throw new Error(`You should provide a path for the route named "${name}"`);
         }
 
-        return undefined;
-    }
+        this._routes.push({name, path: this.getFullPath(name, this.source)});
+      }
 
-    /**
-     * @param {string} name
-     * @returns {string}
-     */
-    public getRoute(name: string): string {
-        const route = this.routes.find(item => name === item.name);
+      return {
+        ...props,
+        children: route.children ? this.buildRoutes(route.children) : null,
+      };
+    });
+  }
 
-        if (!route) {
-            throw new Error(`Can't find route with name: "${name}"`);
-        }
-
+  /**
+   * Recursively get the full path for a specific route
+   *
+   * @param {string} target
+   * @param {Array<any>} routes
+   * @returns {string}
+   */
+  private getFullPath(target: string, routes: any[]): string {
+    for (const route of routes) {
+      if (target === route.name) {
         return route.path;
+      } else {
+        if (route.children) {
+          const subPath = this.getFullPath(target, route.children);
+
+          if (undefined !== subPath) {
+            return `${route.path}/${subPath}`;
+          }
+        }
+      }
     }
+
+    return undefined;
+  }
 }

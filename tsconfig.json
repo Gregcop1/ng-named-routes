@@ -1,4 +1,5 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
     "rootDir": "./src",
@@ -8,7 +9,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "stripInternal": true,
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "inlineSources": true,
     "target": "es6",
@@ -19,13 +20,14 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "angularCompilerOptions": {
     "skipTemplateCodegen": true
   },
   "files": [
-    "src/named-routes.service.ts"
+    "src/named-routes.service.ts",
+    "src/named-routes.service.spec.ts"
   ]
 }
 

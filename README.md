@@ -131,7 +131,7 @@ And then in the template:
     Of course, you can. This service is only concern with path, so if you have parameters or custom config, it doesn't not concern this service.
 </details>
 
-## I've found some bug?
+## I've found a bug
 
 I will not agitate my hand before your eyes, saying that's not the feature you are looking for. Ok! Shits happen.
 

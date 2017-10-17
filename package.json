@@ -1,6 +1,6 @@
 {
   "name": "ng-named-routes",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "Service to set and get named routes for angular 4+ router",
   "main": "dist/named-routes.service.js",
   "types": "dist/named-routes.service.d.ts",
@@ -18,6 +18,7 @@
     "build": "rm -Rf dist && tsc",
     "lint": "tslint -c tslint.json 'src/*.ts'",
     "pretest": "yarn lint",
+    "prepare": "yarn build",
     "test": "$(npm bin)/jest"
   },
   "devDependencies": {

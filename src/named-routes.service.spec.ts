@@ -12,6 +12,7 @@ beforeEach(() => {
       children: [
         { path: 'users', name: 'users.list', children: [
           { path: 'create', name: 'user.create' },
+          { path: 'edit/:id/:slug', name: 'user.edit' },
         ]},
         { path: '', outlet: 'aside' },
       ],
@@ -21,10 +22,11 @@ beforeEach(() => {
 });
 
 test('it should map names with full paths', () => {
-  expect(namedRouteService.routes.length).toEqual(3);
+  expect(namedRouteService.routes.length).toEqual(4);
   expect(namedRouteService.routes).toContainEqual({name: 'login', path: 'login'});
   expect(namedRouteService.routes).toContainEqual({name: 'users.list', path: '/users'});
   expect(namedRouteService.routes).toContainEqual({name: 'user.create', path: '/users/create'});
+  expect(namedRouteService.routes).toContainEqual({name: 'user.edit', path: '/users/edit/:id/:slug'});
 });
 
 test('it should throw an error if a route contain a name but no path', () => {
@@ -58,4 +60,10 @@ test('it should reject wrong paths', () => {
   const func = () => namedRouteService.getRoute('invalid.path');
 
   expect(func).toThrowError(`Can't find route with name: "invalid.path"`);
+});
+
+test('it should find existing paths with params', () => {
+  expect(namedRouteService.getRoute('user.edit')).toEqual('/users/edit/:id/:slug');
+  expect(namedRouteService.getRoute('user.edit', {id: 1})).toEqual('/users/edit/1/:slug');
+  expect(namedRouteService.getRoute('user.edit', {slug: 'chuck', id: 1})).toEqual('/users/edit/1/chuck');
 });

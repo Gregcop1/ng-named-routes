@@ -20,13 +20,14 @@ yarn add ng-named-routes
 
 Give some name to your routes by adding an extra property `name` in their declaration:
 ```
-export const appRoutes: Array<any> = [
+export const appRoutes: any[] = [
   { path: 'login', component: LoginComponent, name: 'login' },
   {
     path: '',
     children: [
       { path: 'users', name: 'users.list', children: [
         { path: 'create', component: UserCreateComponent, name: 'user.create', canActivate: [AuthGuard] },
+        { path: 'edit/:id', component: UserEditComponent, name: 'user.edit', canActivate: [AuthGuard] },
         { path: '', component: UserListComponent, canActivate: [AuthGuard] },
       ]},
       { path: '', component: SidebarComponent, outlet: 'aside', canActivate: [AuthGuard] },
@@ -36,7 +37,7 @@ export const appRoutes: Array<any> = [
 ```
 As you can see, you can apply name on each level of routes.
 
-> Note: this `name` property is not compatible with `Routes` type, that's why I declared my var with a `Array<any>` type, but it's not a problem cause this array is style compatible with route's declaration (`RouterModule.forRoot(appRoutes)`).
+> Note: this `name` property is not compatible with `Routes` type, that's why I declared my var with a `any[]` type, but it's not a problem cause this array is still compatible with route's declaration (`RouterModule.forRoot(appRoutes)`).
 
 Ok, our routes have names so ng-named-routes can enter in action if you declare it in your app module.
 
@@ -77,11 +78,11 @@ export class AppModule {
 
 That's it for config part, now let's see how to use it in our app.
 
-## Usage
+## Usage without parameter
 
 ### In a controller
 
-If you want to use a route named in your component, declare the service with dependency injection and get the route full path by calling the `getRoute` function with a name you declared earlier as parameter.
+If you want to use a named route in your component, declare the service with dependency injection and get the route full path by calling the `getRoute` function with a name you declared earlier as parameter.
 
 ```
 @Component({...})
@@ -89,7 +90,7 @@ export class DashboardComponent {
   constructor(private namedRoutesService: NamedRoutesService, private router: Router) { }
 
   public goToList() {
-    this.router.navigate([this.namedRoutesService.getRoute('test-instances.list')]);
+    this.router.navigate([this.namedRoutesService.getRoute('users.list')]);
   }
 }
 ```
@@ -105,8 +106,8 @@ If you want to use a route in a template you can expose the `getRoute` function 
 export class DashboardComponent {
   public getRoute: (...any) => string;
 
-  constructor(private namedRoutesService: NamedRoutesService) {
-    this.getRoute = this.namedRoutesService.getRoute.bind(this.namedRoutesService);
+  constructor(namedRoutesService: NamedRoutesService) {
+    this.getRoute = namedRoutesService.getRoute.bind(namedRoutesService);
   }
 }
 ```
@@ -119,6 +120,15 @@ And then in the template:
 
 > Note: don't forget to rewrite context of the `getRoute` function by using `bind` otherwise you'll encounter some problem to find your routes.
 
+### Route with parameters
+
+Your route needs parameters? It's not a problem. `getRoute` function accept an object as second parameter where you can set dynamic parts of your route
+
+```
+<a [routerLink]="[getRoute('user.edit', {id: 42})]">{{user.name}}</a>
+```
+
+will redirect you to: "users/edit/42"
 
 ## Q/A
 

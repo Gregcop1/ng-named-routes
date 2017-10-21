@@ -26,16 +26,22 @@ export class NamedRoutesService {
 
   /**
    * @param {string} name
+   * @param {Object} params
    * @returns {string}
    */
-  public getRoute(name: string): string {
+  public getRoute(name: string, params: object = {}): string {
     const route = this._routes.find((item) => name === item.name);
 
     if (!route) {
       throw new Error(`Can't find route with name: "${name}"`);
     }
 
-    return route.path;
+    let routePath = route.path;
+    Object.keys(params).forEach((key) => {
+      routePath = routePath.replace(new RegExp(`:${key}`, 'g'), params[key]);
+    });
+
+    return routePath;
   }
 
   /**

@@ -2,7 +2,7 @@
 Service to set and get named routes for angular 4+ router
 
 One day Angular team had the idea to remove the name parameter of their routes. They had certainly good reason, ... I'm pretty sure they had... but in some case those reasons don't apply.
-This service is the easiest way to reuse them. It allow you to name some route and use those name in component or template instead of the full path you usually copy/paste everywhere in your app (what a joy when the client ask your to change paths ;))
+This service is the easiest way to reuse them. It allow you to name some routes and use those names in component or template instead of the full path you usually copy/paste everywhere in your app (what a joy when the client ask you to change paths ;))
 
 ## Installation
 
@@ -18,7 +18,7 @@ yarn add ng-named-routes
 
 ## Configuration
 
-Give some name to your routes by adding an extra property `name` in their declaration:
+Give some names to your routes by adding an extra property `name` in their declaration:
 ```
 export const appRoutes: any[] = [
   { path: 'login', component: LoginComponent, name: 'login' },
@@ -138,7 +138,7 @@ will redirect you to: "users/edit/42"
 </details>
 <details>
     <summary>Can I use it with routes which have parameters?</summary>
-    Of course, you can. This service is only concern with path, so if you have parameters or custom config, it doesn't not concern this service.
+    Of course, you can. Feed the "getRoute" function with your parameters and it will return you a formated route.
 </details>
 
 ## I've found a bug

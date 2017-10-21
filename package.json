@@ -1,6 +1,6 @@
 {
   "name": "ng-named-routes",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Service to set and get named routes for angular 4+ router",
   "main": "dist/named-routes.service.js",
   "types": "dist/named-routes.service.d.ts",
